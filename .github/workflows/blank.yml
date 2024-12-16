@@ -11,31 +11,18 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Checkout do repositório
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Instalar o Newman e o htmlextra
-      - name: Install Newman and HTML Extra Reporter
-        run: |
-          npm install -g newman
-          npm install -g newman-reporter-htmlextra
+      - name: Install Newman
+        run: npm install -g newman
 
-      # Executar o comando do Newman
+      - name: List Files
+        run: ls -R
+
       - name: Run Postman Collection
         run: |
-          newman run qa_dev_fgc_contribuições.postman_collection.json \
-            -r htmlextra \
-            --reporter-htmlextra-browserTitle "FGC Contribuicoes" \
-            --reporter-htmlextra-title "FGC DEV Test API Automation - Regression Tests" \
-            --reporter-htmlextra-export testResults/FGC_DEV_Contribuicoes_Test_Api_Automation.html
-
-      # Fazer upload do relatório gerado como artefato
-      - name: Upload Test Results
-        uses: actions/upload-artifact@v3
-        with:
-          name: Newman Test Report
-          path: testResults/FGC_DEV_Contribuicoes_Test_Api_Automation.html
+          newman run qa_dev_fgc_contribuições.postman_collection.json
 
 
       # Runs a set of commands using the runners shell
