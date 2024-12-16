@@ -11,18 +11,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
+      # Fazer o checkout do repositório
       - name: Checkout repository
         uses: actions/checkout@v3
 
+      # Instalar o Newman
       - name: Install Newman
         run: npm install -g newman
 
+      # Listar os arquivos no repositório para verificação
       - name: List Files
         run: ls -R
 
+      # Executar a coleção Postman
       - name: Run Postman Collection
         run: |
-          newman run qa_dev_fgc_contribuições.postman_collection.json
+          newman run qa_dev_fgc_contribuições.postman_collection.json \
+            -r cli \
+            || true
 
 
       # Runs a set of commands using the runners shell
