@@ -1,4 +1,4 @@
-name: Postman Regression API Tests
+name: FGC DEV Regression API Tests
 
 on:
   # Disparar manualmente
