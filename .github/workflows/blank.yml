@@ -32,10 +32,34 @@ jobs:
 
       # Executar a coleção Postman
       - name: Run Postman Collection
+        id: run_tests
         run: |
-          newman run qa_dev_fgc_contribuições.postman_collection.json \
-            -r cli \
-            || true
+          newman run qa_dev_fgc_contribuições.postman_collection.json -r cli || echo "TEST_FAILED"
+
+      # Enviar e-mail após a execução
+      - name: Send Email Notification
+        if: always() # Sempre executa, independente do sucesso ou falha
+        uses: dawidd6/action-send-mail@v3
+        with:
+          server_address: smtp.your-email.com
+          server_port: 587
+          username: ${{ secrets.EMAIL_USER }}
+          password: ${{ secrets.EMAIL_PASSWORD }}
+          subject: |
+            FGC DEV Regression Tests: ${{ job.status }}
+          to: jean.villete@gft.com,tamires.reis@gft.com
+          from: github-actions@example.com
+          body: |
+            **FGC DEV Regression Tests Execution**
+
+            - **Status:** ${{ job.status }}
+            - **Branch:** ${{ github.ref }}
+            - **Repository:** ${{ github.repository }}
+            - **Workflow URL:** https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}
+
+            **Logs e Detalhes:**
+            O teste foi executado no GitHub Actions. Verifique os resultados no link acima.
+
 
 
 
