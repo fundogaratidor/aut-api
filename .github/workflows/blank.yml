@@ -13,6 +13,11 @@ on:
     branches:
       - main
 
+  # Disparar automaticamente em cada pull request para a branch release
+  pull_request:
+    branches:
+      - release
+
 jobs:
   run-newman:
     runs-on: ubuntu-latest
@@ -29,7 +34,6 @@ jobs:
       # Listar os arquivos no repositório para verificação
       - name: List Files
         run: ls -R
-
       # Executar a coleção Postman
       - name: Run Postman Collection
         id: run_tests
@@ -38,7 +42,7 @@ jobs:
 
       # Exibir mensagem em caso de falha
       - name: Log Failure
-        if: failure()  # Executa apenas se houver falha nos passos anteriores
+        if: failure()
         run: |
           echo "===================================="
           echo "🚨 Pipeline Failed!"
@@ -47,3 +51,4 @@ jobs:
           echo "Verifique os logs em:"
           echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           echo "===================================="
+
