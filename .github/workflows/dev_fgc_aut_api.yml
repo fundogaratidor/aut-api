@@ -8,11 +8,6 @@ on:
   schedule:
     - cron: "0 19 * * 5"
 
-  # Disparar automaticamente em cada push para a branch main
-  push:
-    branches:
-      - main
-
 jobs:
   run-newman:
     runs-on: ubuntu-latest
@@ -35,6 +30,7 @@ jobs:
         id: run_tests
         run: |
           newman run dev_fgc_contribuições.postman_collection.json -r cli
+
       # Exibir mensagem em caso de falha
       - name: Log Failure
         if: failure()  # Executa apenas se houver falha nos passos anteriores
@@ -46,6 +42,7 @@ jobs:
           echo "Verifique os logs em:"
           echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           echo "===================================="
+
 
       # Runs a set of commands using the runners shell
       - name: Run a multi-line script
