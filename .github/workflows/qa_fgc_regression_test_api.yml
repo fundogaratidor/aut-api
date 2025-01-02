@@ -1,4 +1,4 @@
-name: FGC DEV Regression Tests API
+name: FGC QA Regression Tests API
 
 on:
   # Disparar manualmente
