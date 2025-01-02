@@ -30,7 +30,7 @@ jobs:
       # Executar a coleção Postman com timeout e atraso configurados, usando o ambiente
       - name: Run Postman Collection
         id: run_tests
-        run: newman run qa_fgc_contribuições.postman_collection.json -e qa_fgc_postman_environment.json -r cli --timeout-request 60000 --delay-request 100
+        run: newman run qa_fgc_contribuições.postman_collection.json -e qa.postman_environment.json -r cli --timeout-request 60000 --delay-request 100
 
       # Exibir mensagem em caso de falha
       - name: Log Failure
