@@ -30,7 +30,8 @@ jobs:
       # Executar a coleção Postman com verbose e usando o ambiente
       - name: Run Postman Collection
         id: run_tests
-        run: newman run qa_fgc_contribuições.postman_collection.json -e qa.postman_environment.json --folder "Sprints_1_3/test" -r cli --verbose
+        run: newman run qa_fgc_contribuições.postman_collection.json -e qa.postman_environment.json --folder "test" -r cli --verbose
+
 
 
 
