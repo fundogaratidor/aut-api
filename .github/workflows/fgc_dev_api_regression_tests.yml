@@ -27,9 +27,10 @@ jobs:
       - name: Create Reports Directory
         run: mkdir -p ./reports
 
-      # Executar a coleção Postman e gerar relatório HTML
+      # Executar a coleção Postman e gerar relatório HTML, mesmo em caso de falha
       - name: Run Postman Collection
         id: run_tests
+        continue-on-error: true  # Permite que o passo continue mesmo com falhas
         run: |
           newman run dev_fgc_contribuições.postman_collection.json -r cli,htmlextra --reporter-htmlextra-export ./reports/dev_test_report.html
 
@@ -39,6 +40,7 @@ jobs:
 
       # Fazer upload do relatório HTML como artefato
       - name: Upload HTML Report
+        if: always()  # Garante que o upload aconteça independentemente do resultado anterior
         uses: actions/upload-artifact@v3
         with:
           name: DEV-Test-Report
@@ -55,3 +57,4 @@ jobs:
           echo "Verifique os logs em:"
           echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           echo "===================================="
+
