@@ -17,19 +17,32 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Instalar o Newman
-      - name: Install Newman
-        run: npm install -g newman
+      # Instalar o Newman e o newman-reporter-htmlextra
+      - name: Install Newman and Reporter
+        run: |
+          npm install -g newman
+          npm install -g newman-reporter-htmlextra
 
-      # Listar os arquivos no repositório para verificação
-      - name: List Files
-        run: ls -R
+      # Criar diretório para os relatórios
+      - name: Create Reports Directory
+        run: mkdir -p ./reports
 
-      # Executar a coleção Postman
+      # Executar a coleção Postman e gerar relatório HTML
       - name: Run Postman Collection
         id: run_tests
         run: |
-          newman run dev_fgc_contribuições.postman_collection.json -r cli
+          newman run dev_fgc_contribuições.postman_collection.json -r cli,htmlextra --reporter-htmlextra-export ./reports/dev_test_report.html
+
+      # Listar os relatórios gerados
+      - name: List Reports
+        run: ls -R ./reports
+
+      # Fazer upload do relatório HTML como artefato
+      - name: Upload HTML Report
+        uses: actions/upload-artifact@v3
+        with:
+          name: DEV-Test-Report
+          path: ./reports/dev_test_report.html
 
       # Exibir mensagem em caso de falha
       - name: Log Failure
@@ -42,6 +55,7 @@ jobs:
           echo "Verifique os logs em:"
           echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           echo "===================================="
+
 
 
       # Runs a set of commands using the runners shell
