@@ -52,10 +52,4 @@ jobs:
           echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           echo "===================================="
 
-      # Adicionar artefatos (se necessário) para logs detalhados
-      - name: Upload Newman Report
-        if: always()  # Sempre executa para garantir a coleta dos logs
-        uses: actions/upload-artifact@v3
-        with:
-          name: newman-report
-          path: newman/*.html
+      
