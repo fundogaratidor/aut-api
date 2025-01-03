@@ -36,14 +36,21 @@ jobs:
           echo "Checking reports directory:"
           ls -lh ./reports
 
-      # Fazer upload do relatório HTML como artefato
-      - name: Upload HTML Report
-        if: always()  # Garante que o upload aconteça independentemente do resultado anterior
-        uses: actions/upload-artifact@v3
+      # Enviar o relatório por e-mail
+      - name: Send Report via Email
+        uses: dawidd6/action-send-mail@v3
         with:
-          name: DEV-Test-Report
-          path: ./reports/dev_test_report.html
-          retention-days: 7  # Define o tempo de retenção do artefato
+          server_address: smtp.gmail.com
+          server_port: 465
+          username: ${{ secrets.SMTP_USERNAME }}
+          password: ${{ secrets.SMTP_PASSWORD }}
+          subject: "DEV Test Report"
+          body: "Segue em anexo o relatório gerado pelo pipeline DEV."
+          to: |
+            silvio.aulik@gmail.com,
+            silvio.tadeu@gft.com
+          from: "GitHub Actions <silvio.aulik@gmail.com>"
+          attachments: ./reports/dev_test_report.html
 
       # Exibir mensagem em caso de falha
       - name: Log Failure
@@ -56,6 +63,7 @@ jobs:
           echo "Verifique os logs em:"
           echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           echo "===================================="
+
 
 
 
