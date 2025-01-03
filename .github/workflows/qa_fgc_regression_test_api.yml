@@ -27,17 +27,18 @@ jobs:
       - name: List Files
         run: ls -R
 
-      # Executar a coleção Postman com verbose e usando o ambiente
-      - name: Run Postman Collection
-        id: run_tests
-        run: newman run qa_fgc_contribuições.postman_collection.json -e qa.postman_environment.json --folder "test" -r cli --verbose
-
-      # Testar um request simples usando cURL
+      # Validar conectividade com o servidor usando cURL
       - name: Test Curl Request
         run: |
           curl -X POST "http://internal-contribuicoes-api-ecs-lb-2017763910.us-east-1.elb.amazonaws.com:1000/api/contribuicoes/baseContribuicao" \
             -H "Content-Type: application/json" \
             -d '{"codigoTransacao": "h02d5347-719g-5e65-667d-22811f416364", "data": {"codigoLeiaute": "FGC405", "versaoLeiaute": "1", "cnpj": "60701190"}}'
+
+      # Executar a coleção Postman com verbose e usando o ambiente
+      - name: Run Postman Collection
+        id: run_tests
+        run: |
+          newman run qa_fgc_contribuições.postman_collection.json -e qa.postman_environment.json --folder "test" -r cli,htmlextra --verbose
 
       # Exibir mensagem em caso de falha
       - name: Log Failure
@@ -49,9 +50,12 @@ jobs:
           echo "Commit: ${{ github.sha }}"
           echo "Verifique os logs em:"
           echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-
           echo "===================================="
 
-
-
-
+      # Adicionar artefatos (se necessário) para logs detalhados
+      - name: Upload Newman Report
+        if: always()  # Sempre executa para garantir a coleta dos logs
+        uses: actions/upload-artifact@v3
+        with:
+          name: newman-report
+          path: newman/*.html
