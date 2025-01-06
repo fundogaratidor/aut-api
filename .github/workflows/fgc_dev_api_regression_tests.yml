@@ -9,36 +9,37 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Fazer o checkout do repositório
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      # Instalar Newman e newman-reporter-htmlextra
       - name: Install Newman and Reporter
         run: |
           npm install -g newman
           npm install -g newman-reporter-htmlextra
 
-      # Criar diretório para os relatórios
       - name: Create Reports Directory
         run: mkdir -p ./reports
 
-      # Executar a coleção Postman e gerar relatório HTML
       - name: Run Postman Collection
         id: run_tests
-        continue-on-error: true  # Permitir continuação mesmo com falhas
+        continue-on-error: true
         run: |
           newman run dev_fgc_contribuições.postman_collection.json \
           -r cli,htmlextra \
           --reporter-htmlextra-export ./reports/dev_test_report.html
 
-      # Listar os relatórios gerados
+      - name: Verify Report File
+        run: |
+          if [ ! -f ./reports/dev_test_report.html ]; then
+            echo "Error: Report file not found!"
+            exit 1
+          fi
+
       - name: List Reports for Debugging
         run: |
-          echo "Listing reports directory contents:"
-          ls -lh ./reports
+          echo "Checking reports directory contents:"
+          ls -lh ./reports || echo "Reports directory is empty or does not exist."
 
-      # Enviar o relatório por e-mail
       - name: Send Report via Email
         uses: dawidd6/action-send-mail@v3
         with:
@@ -49,13 +50,11 @@ jobs:
           subject: "DEV Test Report"
           body: "Segue em anexo o relatório gerado pelo pipeline DEV."
           to: cristina.briguenti@fgc.org.br
-          from: "GitHub Actions <silvio.aulik@gmail.com>"
-          fromname: "FGC DEV Regression Tests API"
+          from: "FGC DEV Regression Tests API <silvio.aulik@gmail.com>"
           attachments: ./reports/dev_test_report.html
 
-      # Mensagem em caso de falha no pipeline
       - name: Log Failure
-        if: failure()  # Executar apenas se houver falha
+        if: failure()
         run: |
           echo "===================================="
           echo "🚨 Pipeline Failed!"
@@ -64,6 +63,7 @@ jobs:
           echo "Verifique os logs em:"
           echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           echo "===================================="
+
 
           echo "===================================="
 
