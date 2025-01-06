@@ -48,7 +48,7 @@ jobs:
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "DEV Test Report"
           body: "Segue em anexo o relatório gerado pelo pipeline DEV."
-          to: rubensperini@yahoo.com.br
+          to: cristina.briguenti@fgc.org.br,silvio.aulik@gmail.com
           from: "GitHub Actions <silvio.aulik@gmail.com>"
           fromname: "FGC DEV Regression Tests API"
           attachments: ./reports/dev_test_report.html
