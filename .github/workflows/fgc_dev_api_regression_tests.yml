@@ -49,7 +49,6 @@ jobs:
           to: |
             silvio.aulik@gmail.com,
             cristina.briguenti@fgc.org.br
-  
           from: "GitHub Actions <silvio.aulik@gmail.com>"
           attachments: ./reports/dev_test_report.html
 
