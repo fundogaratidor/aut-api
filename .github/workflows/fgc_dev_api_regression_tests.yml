@@ -47,7 +47,8 @@ jobs:
           subject: "DEV Test Report"
           body: "Segue em anexo o relatório gerado pelo pipeline DEV."
           to: |
-            silvio.aulik@gmail.com
+            silvio.aulik@gmail.com,
+            cristina.briguenti@fgc.org.br
   
           from: "GitHub Actions <silvio.aulik@gmail.com>"
           attachments: ./reports/dev_test_report.html
