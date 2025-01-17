@@ -82,19 +82,10 @@ jobs:
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "API Test Report - QA Pipeline"
-          body: |
-            <html>
-              <body>
-                <h2>Relatório de Testes - QA Pipeline</h2>
-                <p>Segue abaixo o gráfico com os resultados dos testes:</p>
-                <img src="cid:test_results_chart" alt="Test Results Pie Chart" />
-                <p>O relatório completo está anexado neste e-mail.</p>
-              </body>
-            </html>
-          to: silvio.aulik@gmail.com
+          body: "Anexo: Relatório de Testes em QA gerado pela pipeline."
+          to: cristina.briguenti@fgc.org.br,silvio.aulik@gmail.com,rubensperini@yahoo.com.br
           from: "FGC QA Regression Test Report - API <silvio.aulik@gmail.com>"
           attachments: ./reports/qa_test_report.html,./reports/test_results_pie_chart.png
-          attachment_cids: test_results_chart
 
       - name: Log Failure
         if: failure()
