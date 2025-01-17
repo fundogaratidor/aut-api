@@ -27,11 +27,11 @@ jobs:
           newman run qa_fgc_aws_contribuicoes.postman_collections.json \
           -e qa_fgc_aws.postman_environment.json \
           -r cli,htmlextra \
-          --reporter-htmlextra-export ./reports/dev_test_report.html
+          --reporter-htmlextra-export ./reports/qa_test_report.html
 
       - name: Verify Report File
         run: |
-          if [ ! -f ./reports/dev_test_report.html ]; then
+          if [ ! -f ./reports/qa_test_report.html ]; then
             echo "Error: Report file not found!"
             exit 1
           fi
@@ -49,10 +49,10 @@ jobs:
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "DEV Test Report"
-          body: "Segue em anexo o relatório gerado pelo pipeline DEV."
-          to: cristina.briguenti@fgc.org.br,silvio.aulik@gmail.com
+          body: "Segue em anexo o relatório dos Testes em QA gerado pela Pipeline."
+          to: cristina.briguenti@fgc.org.br,silvio.aulik@gmail.com,staulik10@gmail.com
           from: "FGC DEV Regression Tests API <silvio.aulik@gmail.com>"
-          attachments: ./reports/dev_test_report.html
+          attachments: ./reports/qa_test_report.html
 
       - name: Log Failure
         if: failure()
