@@ -47,8 +47,8 @@ jobs:
               data = json.load(f)
 
           # Extract test results
-          total = data['run']['stats']['tests']['total']
-          failed = data['run']['stats']['tests']['failed']
+          total = data['run']['stats']['assertions']['total']
+          failed = data['run']['stats']['assertions']['failed']
           passed = total - failed
 
           # Create pie chart
@@ -91,7 +91,7 @@ jobs:
                 <p>O relatório completo está anexado neste e-mail.</p>
               </body>
             </html>
-          to: cristina.briguenti@fgc.org.br,silvio.aulik@gmail.com,rubensperini@yahoo.com.br
+          to: silvio.aulik@gmail.com
           from: "FGC QA Regression Test Report - API <silvio.aulik@gmail.com>"
           attachments: ./reports/qa_test_report.html,./reports/test_results_pie_chart.png
           attachment_cids: test_results_chart
@@ -100,7 +100,7 @@ jobs:
         if: failure()
         run: |
           echo "===================================="
-          echo "🚨 Pipeline Failed!"
+          echo "\ud83d\udea8 Pipeline Failed!"
           echo "Branch: ${{ github.ref }}"
           echo "Commit: ${{ github.sha }}"
           echo "Verifique os logs em:"
