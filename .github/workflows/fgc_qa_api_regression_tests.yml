@@ -50,7 +50,7 @@ jobs:
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "API Test Report - QA Pipeline"
           body: "Anexo: Relatório de Testes em QA gerado pela pipeline."
-          to: cristina.briguenti@fgc.org.br,silvio.aulik@gmail.com,staulik10@gmail.com
+          to: cristina.briguenti@fgc.org.br,silvio.aulik@gmail.com,rubensperini@yahoo.com.br
           from: "FGC QA Regression Test Report - API <silvio.aulik@gmail.com>"
           attachments: ./reports/qa_test_report.html
 
