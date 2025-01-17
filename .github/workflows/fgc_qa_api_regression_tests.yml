@@ -76,7 +76,7 @@ jobs:
               text.set_fontsize(12)
               text.set_fontweight('bold')
 
-          ax.set_title('Test Results - Styled Pie Chart', pad=20, fontsize=16, color='white')
+          ax.set_title("Test Results - API's FGC in QA", pad=20, fontsize=16, color='white')
           ax.set_facecolor('black')  # Set the pie chart background to black
           plt.savefig('./reports/test_results_pie_chart.png', bbox_inches='tight')
           EOF
@@ -101,7 +101,7 @@ jobs:
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "API Test Report - QA Pipeline"
           body: "Anexo: Relatório de Testes em QA gerado pela pipeline."
-          to: silvio.aulik@gmail.com
+          to: cristina.briguenti@fgc.org.br,silvio.aulik@gmail.com,rubensperini@yahoo.com.br
           from: "FGC QA Regression Test Report - API <silvio.aulik@gmail.com>"
           attachments: ./reports/qa_test_report.html,./reports/test_results_pie_chart.png
 
@@ -115,7 +115,6 @@ jobs:
           echo "Verifique os logs em:"
           echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           echo "===================================="
-
 
 
 
