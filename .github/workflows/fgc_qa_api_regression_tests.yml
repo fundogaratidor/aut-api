@@ -16,10 +16,12 @@ jobs:
       - name: Checkout repository
         uses: actions/checkout@v3
 
-      - name: Install Newman and Reporter
+      - name: Install Dependencies
         run: |
           npm install -g newman
           npm install -g newman-reporter-htmlextra
+          sudo apt-get install -y python3 python3-pip
+          pip3 install matplotlib
 
       - name: Create Reports Directory
         run: mkdir -p ./reports
@@ -30,20 +32,47 @@ jobs:
         run: |
           newman run qa_fgc_aws_contribuicoes.postman_collections.json \
           -e qa_fgc_aws.postman_environment.json \
-          -r cli,htmlextra \
+          -r cli,htmlextra,json \
+          --reporter-json-export ./reports/test_results.json \
           --reporter-htmlextra-export ./reports/qa_test_report.html
 
-      - name: Verify Report File
+      - name: Generate Test Results Pie Chart
+        run: |
+          python3 <<EOF
+          import json
+          import matplotlib.pyplot as plt
+
+          # Load Newman JSON report
+          with open('./reports/test_results.json') as f:
+              data = json.load(f)
+
+          # Extract test results
+          total = data['run']['stats']['tests']['total']
+          failed = data['run']['stats']['tests']['failed']
+          passed = total - failed
+
+          # Create pie chart
+          labels = ['Passed', 'Failed']
+          sizes = [passed, failed]
+          colors = ['#28a745', '#dc3545']
+          explode = (0.1, 0)  # Highlight the 'Passed' section
+
+          plt.figure(figsize=(6, 6))
+          plt.pie(sizes, explode=explode, labels=labels, colors=colors, autopct='%1.1f%%', startangle=140)
+          plt.title('Test Results')
+          plt.savefig('./reports/test_results_pie_chart.png')
+          EOF
+
+      - name: Verify Report Files
         run: |
           if [ ! -f ./reports/qa_test_report.html ]; then
-            echo "Error: Report file not found!"
+            echo "Error: HTML report not found!"
             exit 1
           fi
-
-      - name: List Reports for Debugging
-        run: |
-          echo "Checking reports directory contents:"
-          ls -lh ./reports || echo "Reports directory is empty or does not exist."
+          if [ ! -f ./reports/test_results_pie_chart.png ]; then
+            echo "Error: Pie chart not found!"
+            exit 1
+          fi
 
       - name: Send Report via Email
         uses: dawidd6/action-send-mail@v3
@@ -53,10 +82,19 @@ jobs:
           username: ${{ secrets.SMTP_USERNAME }}
           password: ${{ secrets.SMTP_PASSWORD }}
           subject: "API Test Report - QA Pipeline"
-          body: "Anexo: Relatório de Testes em QA gerado pela pipeline."
+          body: |
+            <html>
+              <body>
+                <h2>Relatório de Testes - QA Pipeline</h2>
+                <p>Segue abaixo o gráfico com os resultados dos testes:</p>
+                <img src="cid:test_results_chart" alt="Test Results Pie Chart" />
+                <p>O relatório completo está anexado neste e-mail.</p>
+              </body>
+            </html>
           to: cristina.briguenti@fgc.org.br,silvio.aulik@gmail.com,rubensperini@yahoo.com.br
           from: "FGC QA Regression Test Report - API <silvio.aulik@gmail.com>"
-          attachments: ./reports/qa_test_report.html
+          attachments: ./reports/qa_test_report.html,./reports/test_results_pie_chart.png
+          attachment_cids: test_results_chart
 
       - name: Log Failure
         if: failure()
@@ -68,6 +106,7 @@ jobs:
           echo "Verifique os logs em:"
           echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           echo "===================================="
+
 
 
 
