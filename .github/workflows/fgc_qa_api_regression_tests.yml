@@ -6,7 +6,7 @@ on:
 
   # Agendar para rodar automaticamente às sextas-feiras às 19:00 UTC
   schedule:
-    - cron: "0 19 * * 5"
+    - cron: "0 22 * * 5"
 
 jobs:
   run-newman:
