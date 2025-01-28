@@ -22,7 +22,7 @@ jobs:
           npm install -g newman-reporter-htmlextra
           sudo apt-get install -y python3 python3-pip
           pip3 install matplotlib
-
+          
       - name: Create Reports Directory
         run: mkdir -p ./reports
 
@@ -34,32 +34,28 @@ jobs:
           -e qa_fgc_aws.postman_environment.json \
           -r cli,htmlextra,json \
           --reporter-json-export ./reports/test_results.json \
-          --reporter-htmlextra-export ./reports/qa_test_report.html
-
+          --reporter-htmlextra-export ./reports/qa_test_report.html \
+          --reporter-htmlextra-title "FGC QA-AWS Sprints 1 e 3 API Test"
+          
       - name: Generate Test Results Pie Chart
         run: |
           python3 <<EOF
           import json
           import matplotlib.pyplot as plt
-
           # Load Newman JSON report
           with open('./reports/test_results.json') as f:
               data = json.load(f)
-
           # Extract test results
           total = data['run']['stats']['assertions']['total']
           failed = data['run']['stats']['assertions']['failed']
           passed = total - failed
-
           # Create pie chart
           labels = ['Passed', 'Failed']
           sizes = [passed, failed]
           colors = ['#4CAF50', '#FF6F61']  # Brighter green and lighter red
           explode = (0.1, 0)  # Highlight the 'Passed' section
-
           fig, ax = plt.subplots(figsize=(8, 8))
           fig.patch.set_facecolor('black')  # Set the background to black
-
           wedges, texts, autotexts = ax.pie(
               sizes,
               explode=explode,
@@ -70,17 +66,15 @@ jobs:
               shadow=True,  # Add shadow for a 3D effect
               textprops={'color': "white"}
           )
-
           # Styling the chart
           for text in texts + autotexts:
               text.set_fontsize(12)
               text.set_fontweight('bold')
-
           ax.set_title("Test Results - API's FGC in QA", pad=20, fontsize=16, color='white')
           ax.set_facecolor('black')  # Set the pie chart background to black
           plt.savefig('./reports/test_results_apis_FGC_in_QA.png', bbox_inches='tight')
           EOF
-
+          
       - name: Verify Report Files
         run: |
           if [ ! -f ./reports/qa_test_report.html ]; then
@@ -91,7 +85,7 @@ jobs:
             echo "Error: Pie chart not found!"
             exit 1
           fi
-
+          
       - name: Send Report via Email
         uses: dawidd6/action-send-mail@v3
         with:
