@@ -1,7 +1,7 @@
 {
 	"info": {
 		"_postman_id": "c60dce70-20f1-47ed-b641-627f5f6ebf1d",
-		"name": "Contribuições 2.0 - QAWS",
+		"name": "Contribuições 2.0 - QA WS",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
 		"_exporter_id": "40178538",
 		"_collection_link": "https://www.postman.com/gftadeu/workspace/my-workspace/collection/40178538-c60dce70-20f1-47ed-b641-627f5f6ebf1d?action=share&source=collection_link&creator=40178538"
@@ -33,39 +33,44 @@
 									"listen": "prerequest",
 									"script": {
 										"exec": [
-											"// Gerar número aleatório de 6 dígitos para o codigoTransacao\r",
-											"var randomNumberTransacao = Math.floor(Math.random() * 1000000);\r",
+											"// 🔹 Função para gerar um número aleatório de 6 dígitos\r",
+											"function gerarNumeroAleatorio() {\r",
+											"    return Math.floor(Math.random() * 1000000).toString().padStart(6, '0');\r",
+											"}\r",
 											"\r",
-											"// Garantir que o número tenha 6 dígitos (completa com zeros à esquerda, se necessário)\r",
-											"var formattedNumberTransacao = randomNumberTransacao.toString().padStart(6, '0');\r",
+											"// 🔹 Geração do código de transação\r",
+											"let randomCodigoTransacao = gerarNumeroAleatorio();\r",
+											"pm.variables.set(\"randomCodigoTransacao\", randomCodigoTransacao);\r",
+											"console.log(\"Número aleatório CódigoTransacao:\", randomCodigoTransacao);\r",
 											"\r",
-											"// Armazenar o número gerado na variável \"randomCodigoTransacao\"\r",
-											"pm.variables.set(\"randomCodigoTransacao\", formattedNumberTransacao);\r",
+											"// 🔹 Geração dos IDs de contribuição\r",
+											"let idContribuicao1 = gerarNumeroAleatorio();\r",
+											"let idContribuicao2 = (parseInt(idContribuicao1) + 1).toString().padStart(6, '0');\r",
+											"let idContribuicao3 = (parseInt(idContribuicao2) + 1).toString().padStart(6, '0');\r",
 											"\r",
-											"// Mostrar no console o valor gerado para o codigoTransacao\r",
-											"console.log(\"Número aleatório CódigoTransacao: \" + formattedNumberTransacao);\r",
+											"pm.variables.set(\"idContribuicao1\", idContribuicao1);\r",
+											"pm.variables.set(\"idContribuicao2\", idContribuicao2);\r",
+											"pm.variables.set(\"idContribuicao3\", idContribuicao3);\r",
 											"\r",
-											"// Gerar número aleatório de 6 dígitos para o idContribuicao1\r",
-											"var randomNumber1 = Math.floor(Math.random() * 1000000);\r",
+											"console.log(\"Número aleatório idContribuicao1:\", idContribuicao1);\r",
+											"console.log(\"Número aleatório idContribuicao2:\", idContribuicao2);\r",
+											"console.log(\"Número aleatório idContribuicao3:\", idContribuicao3);\r",
 											"\r",
-											"// Garantir que o número tenha 6 dígitos (completa com zeros à esquerda, se necessário)\r",
-											"var formattedNumber1 = randomNumber1.toString().padStart(6, '0');\r",
+											"// 🔹 Função para calcular `mmCompetencia` (mês atual - 1)\r",
+											"function calcularMmCompetencia() {\r",
+											"    let hoje = new Date();\r",
+											"    hoje.setMonth(hoje.getMonth() - 1); // Retrocede 1 mês\r",
 											"\r",
-											"// Gerar idContribuicao2 como o número subsequente ao idContribuicao1\r",
-											"var formattedNumber2 = (parseInt(formattedNumber1) + 1).toString().padStart(6, '0');\r",
+											"    let ano = hoje.getFullYear();\r",
+											"    let mes = String(hoje.getMonth() + 1).padStart(2, '0'); // Garante dois dígitos no mês\r",
 											"\r",
-											"// Gerar idContribuicao3 como o número subsequente ao idContribuicao2\r",
-											"var formattedNumber3 = (parseInt(formattedNumber2) + 1).toString().padStart(6, '0');\r",
+											"    return `${ano}${mes}`;\r",
+											"}\r",
 											"\r",
-											"// Armazenar os números gerados nas variáveis do Postman\r",
-											"pm.variables.set(\"idContribuicao1\", formattedNumber1);\r",
-											"pm.variables.set(\"idContribuicao2\", formattedNumber2);\r",
-											"pm.variables.set(\"idContribuicao3\", formattedNumber3);\r",
-											"\r",
-											"// Mostrar no console os valores gerados (opcional para depuração)\r",
-											"console.log(\"Número aleatório idContribuicao1: \" + formattedNumber1);\r",
-											"console.log(\"Número aleatório idContribuicao2: \" + formattedNumber2);\r",
-											"console.log(\"Número aleatório idContribuicao3: \" + formattedNumber3);\r",
+											"// 🔹 Atualiza a variável `mmCompetencia` automaticamente\r",
+											"let mmCompetencia = calcularMmCompetencia();\r",
+											"pm.variables.set(\"mmCompetencia\", mmCompetencia);\r",
+											"console.log(\"mmCompetencia atualizado para:\", mmCompetencia);\r",
 											"\r",
 											"\r",
 											""
@@ -101,7 +106,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"codigoTransacao\": \"h02d5347-719g-5e65-667d-22811f{{randomCodigoTransacao}}\",\r\n    \"data\": {\r\n        \"codigoLeiaute\": \"FGC405\",\r\n        \"versaoLeiaute\": \"1\",\r\n        \"cnpj\": \"60701190\",\r\n        \"parte\": \" teste jd\",\r\n        \"contato\": {\r\n            \"nome\": \" teste\",\r\n            \"telefone\": \"1199521455\",\r\n            \"email\": \"apitest@gftfgc.com\"\r\n        },\r\n        \"contribuicao\": {\r\n            \"competencias\": [\r\n                {\r\n                    \"mmCompetencia\": \"202501\",\r\n                    \"baseCompetencia\": \"202412\",\r\n                    \"tipoBaseContribuicao\": \"1\",\r\n                    \"baseContribuicoes\": [\r\n                        {\r\n                            \"idContribuicao\": \"6070119016092024888888{{idContribuicao1}}\",\r\n                            \"tipoContribuicao\": 1,\r\n                            \"valorBaseContribuicao\": 134100.98,\r\n                            \"informacaoAdicional\": {\r\n                                \"valorPatrimonioLiquidoAjustado\": 200.12,\r\n                                \"valorReferencia\": 5000.22,\r\n                                \"valorCaptacaoReferenciaAnterior\": 3500.33\r\n                            }\r\n                        },\r\n                        {\r\n                            \"idContribuicao\": \"6070119016092024888888{{idContribuicao2}}\",\r\n                            \"tipoContribuicao\": 2,\r\n                            \"valorBaseContribuicao\": 7437580.87\r\n                        },\r\n                        {\r\n                            \"idContribuicao\": \"6070119016092024888888{{idContribuicao3}}\",\r\n                            \"tipoContribuicao\": 4,\r\n                            \"valorBaseContribuicao\": 1253232.00\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        }\r\n    }\r\n}",
+									"raw": "{\r\n    \"codigoTransacao\": \"h02d5347-719g-5e65-667d-22811f{{randomCodigoTransacao}}\",\r\n    \"data\": {\r\n        \"codigoLeiaute\": \"FGC405\",\r\n        \"versaoLeiaute\": \"1\",\r\n        \"cnpj\": \"60701190\",\r\n        \"parte\": \" teste jd\",\r\n        \"contato\": {\r\n            \"nome\": \" teste\",\r\n            \"telefone\": \"1199521455\",\r\n            \"email\": \"apitest@gftfgc.com\"\r\n        },\r\n        \"contribuicao\": {\r\n            \"competencias\": [\r\n                {\r\n                    \"mmCompetencia\": \"{{mmCompetencia}}\",\r\n                    \"baseCompetencia\": \"202412\",\r\n                    \"tipoBaseContribuicao\": \"1\",\r\n                    \"baseContribuicoes\": [\r\n                        {\r\n                            \"idContribuicao\": \"6070119016092024888888{{idContribuicao1}}\",\r\n                            \"tipoContribuicao\": 1,\r\n                            \"valorBaseContribuicao\": 134100.98,\r\n                            \"informacaoAdicional\": {\r\n                                \"valorPatrimonioLiquidoAjustado\": 200.12,\r\n                                \"valorReferencia\": 5000.22,\r\n                                \"valorCaptacaoReferenciaAnterior\": 3500.33\r\n                            }\r\n                        },\r\n                        {\r\n                            \"idContribuicao\": \"6070119016092024888888{{idContribuicao2}}\",\r\n                            \"tipoContribuicao\": 2,\r\n                            \"valorBaseContribuicao\": 7437580.87\r\n                        },\r\n                        {\r\n                            \"idContribuicao\": \"6070119016092024888888{{idContribuicao3}}\",\r\n                            \"tipoContribuicao\": 4,\r\n                            \"valorBaseContribuicao\": 1253232.00\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        }\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -12212,7 +12217,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"codigoTransacao\": \"h02d5347-719g-5e65-667d-22811f{{randomCodigoTransacao}}\",\r\n    \"data\": {\r\n        \"codigoLeiaute\": \"FGC405\",\r\n        \"versaoLeiaute\": \"1\",\r\n        \"cnpj\": \"60701190\",\r\n        \"parte\": \" teste jd\",\r\n        \"contato\": {\r\n            \"nome\": \" teste\",\r\n            \"telefone\": \"11999999999\",\r\n            \"email\": \"apitesting@fgc.com\"\r\n        },\r\n        \"contribuicao\": {\r\n            \"competencias\": [\r\n                {\r\n                    \"mmCompetencia\": \"202501\",\r\n                    \"baseCompetencia\": \"202412\",\r\n                    \"tipoBaseContribuicao\": \"1\",\r\n                    \"baseContribuicoes\": [\r\n                        {\r\n                            \"idContribuicao\": \"6070119016092024888888{{idContribuicao1}}\",\r\n                            \"tipoContribuicao\": 1,\r\n                            \"valorBaseContribuicao\": 2196437422.61,\r\n                            \"informacaoAdicional\": {\r\n                                \"valorPatrimonioLiquidoAjustado\": 264768946.34,\r\n                                \"valorReferencia\": 1967309107.67,\r\n                                \"valorCaptacaoReferenciaAnterior\": 2091503547.84\r\n                            }\r\n                        },\r\n                        {\r\n                            \"idContribuicao\": \"6070119016092024888888{{idContribuicao2}}\",\r\n                            \"tipoContribuicao\": 2,\r\n                            \"valorBaseContribuicao\": 0.00\r\n                        },\r\n                        {\r\n                            \"idContribuicao\": \"6070119016092024888888{{idContribuicao3}}\",\r\n                            \"tipoContribuicao\": 4,\r\n                            \"valorBaseContribuicao\": 0.00\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        }\r\n    }\r\n}",
+									"raw": "{\r\n    \"codigoTransacao\": \"h02d5347-719g-5e65-667d-22811f{{randomCodigoTransacao}}\",\r\n    \"data\": {\r\n        \"codigoLeiaute\": \"FGC405\",\r\n        \"versaoLeiaute\": \"1\",\r\n        \"cnpj\": \"60701190\",\r\n        \"parte\": \" teste jd\",\r\n        \"contato\": {\r\n            \"nome\": \"Silvio Aulik\",\r\n            \"telefone\": \"1194977027\",\r\n            \"email\": \"apitesting@fgc.com\"\r\n        },\r\n        \"contribuicao\": {\r\n            \"competencias\": [\r\n                {\r\n                    \"mmCompetencia\": \"202501\",\r\n                    \"baseCompetencia\": \"202412\",\r\n                    \"tipoBaseContribuicao\": \"1\",\r\n                    \"baseContribuicoes\": [\r\n                        {\r\n                            \"idContribuicao\": \"6070119016092024888888{{idContribuicao1}}\",\r\n                            \"tipoContribuicao\": 1,\r\n                            \"valorBaseContribuicao\": 2196437422.61,\r\n                            \"informacaoAdicional\": {\r\n                                \"valorPatrimonioLiquidoAjustado\": 264768946.34,\r\n                                \"valorReferencia\": 1967309107.67,\r\n                                \"valorCaptacaoReferenciaAnterior\": 2091503547.84\r\n                            }\r\n                        },\r\n                        {\r\n                            \"idContribuicao\": \"6070119016092024888888{{idContribuicao2}}\",\r\n                            \"tipoContribuicao\": 2,\r\n                            \"valorBaseContribuicao\": 0.00\r\n                        },\r\n                        {\r\n                            \"idContribuicao\": \"6070119016092024888888{{idContribuicao3}}\",\r\n                            \"tipoContribuicao\": 4,\r\n                            \"valorBaseContribuicao\": 0.00\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        }\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -12319,7 +12324,7 @@
 								],
 								"body": {
 									"mode": "raw",
-									"raw": "{\r\n    \"codigoTransacao\": \"h02d5347-719g-5e65-667d-22811f{{randomCodigoTransacao}}\",\r\n    \"data\": {\r\n        \"codigoLeiaute\": \"FGC405\",\r\n        \"versaoLeiaute\": \"1\",\r\n        \"cnpj\": \"60701190\",\r\n        \"parte\": \" teste jd\",\r\n        \"contato\": {\r\n            \"nome\": \" teste\",\r\n            \"telefone\": \"11999999999\",\r\n            \"email\": \"apitesting@fgc.com\"\r\n        },\r\n        \"contribuicao\": {\r\n            \"competencias\": [\r\n                {\r\n                    \"mmCompetencia\": \"202501\",\r\n                    \"baseCompetencia\": \"202412\",\r\n                    \"tipoBaseContribuicao\": \"1\",\r\n                    \"baseContribuicoes\": [\r\n                        {\r\n                            \"idContribuicao\": \"6070119016092024888888{{idContribuicao1}}\",\r\n                            \"tipoContribuicao\": 1,\r\n                            \"valorBaseContribuicao\": 9079335420.26,\r\n                            \"informacaoAdicional\": {\r\n                                \"valorPatrimonioLiquidoAjustado\": 1207656446.94,\r\n                                \"valorReferencia\": 8585370777.53,\r\n                                \"valorCaptacaoReferenciaAnterior\": 11405530851.40\r\n                            }\r\n                        },\r\n                        {\r\n                            \"idContribuicao\": \"6070119016092024888888{{idContribuicao2}}\",\r\n                            \"tipoContribuicao\": 2,\r\n                            \"valorBaseContribuicao\": 0.00\r\n                        },\r\n                        {\r\n                            \"idContribuicao\": \"6070119016092024888888{{idContribuicao3}}\",\r\n                            \"tipoContribuicao\": 4,\r\n                            \"valorBaseContribuicao\": 0.00\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        }\r\n    }\r\n}",
+									"raw": "{\r\n    \"codigoTransacao\": \"h02d5347-719g-5e65-667d-22811f{{randomCodigoTransacao}}\",\r\n    \"data\": {\r\n        \"codigoLeiaute\": \"FGC405\",\r\n        \"versaoLeiaute\": \"1\",\r\n        \"cnpj\": \"60701190\",\r\n        \"parte\": \" teste jd\",\r\n        \"contato\": {\r\n            \"nome\": \"Silvio Aulik\",\r\n            \"telefone\": \"1194977029\",\r\n            \"email\": \"apitesting@fgc.com\"\r\n        },\r\n        \"contribuicao\": {\r\n            \"competencias\": [\r\n                {\r\n                    \"mmCompetencia\": \"202501\",\r\n                    \"baseCompetencia\": \"202412\",\r\n                    \"tipoBaseContribuicao\": \"1\",\r\n                    \"baseContribuicoes\": [\r\n                        {\r\n                            \"idContribuicao\": \"6070119016092024888888{{idContribuicao1}}\",\r\n                            \"tipoContribuicao\": 1,\r\n                            \"valorBaseContribuicao\": 9079335420.26,\r\n                            \"informacaoAdicional\": {\r\n                                \"valorPatrimonioLiquidoAjustado\": 1207656446.94,\r\n                                \"valorReferencia\": 8585370777.53,\r\n                                \"valorCaptacaoReferenciaAnterior\": 11405530851.40\r\n                            }\r\n                        },\r\n                        {\r\n                            \"idContribuicao\": \"6070119016092024888888{{idContribuicao2}}\",\r\n                            \"tipoContribuicao\": 2,\r\n                            \"valorBaseContribuicao\": 0.00\r\n                        },\r\n                        {\r\n                            \"idContribuicao\": \"6070119016092024888888{{idContribuicao3}}\",\r\n                            \"tipoContribuicao\": 4,\r\n                            \"valorBaseContribuicao\": 0.00\r\n                        }\r\n                    ]\r\n                }\r\n            ]\r\n        }\r\n    }\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
