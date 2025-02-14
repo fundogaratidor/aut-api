@@ -8,6 +8,20 @@ on:
   schedule:
     - cron: "0 22 * * 5"
 
+  # Disparar quando houver um PR nos repositórios dos devs
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
+      - develop
+    paths:
+      - "**"
+    repositories:
+      - fundogaratidor/ctb-spring-library-test
+      - fundogaratidor/ctb-spring-endpoints-batch
+      - fundogaratidor/ctb-spring-endpoints
+      - fundogaratidor/ctb-spring-library
+
 jobs:
   run-newman:
     runs-on: ubuntu-latest
@@ -52,10 +66,10 @@ jobs:
           # Create pie chart
           labels = ['Passed', 'Failed']
           sizes = [passed, failed]
-          colors = ['#4CAF50', '#FF6F61']  # Brighter green and lighter red
-          explode = (0.1, 0)  # Highlight the 'Passed' section
+          colors = ['#4CAF50', '#FF6F61']
+          explode = (0.1, 0)
           fig, ax = plt.subplots(figsize=(8, 8))
-          fig.patch.set_facecolor('black')  # Set the background to black
+          fig.patch.set_facecolor('black')
           wedges, texts, autotexts = ax.pie(
               sizes,
               explode=explode,
@@ -63,15 +77,14 @@ jobs:
               colors=colors,
               autopct='%1.1f%%',
               startangle=140,
-              shadow=True,  # Add shadow for a 3D effect
+              shadow=True,
               textprops={'color': "white"}
           )
-          # Styling the chart
           for text in texts + autotexts:
               text.set_fontsize(12)
               text.set_fontweight('bold')
           ax.set_title("Test Results - API's FGC in QA", pad=20, fontsize=16, color='white')
-          ax.set_facecolor('black')  # Set the pie chart background to black
+          ax.set_facecolor('black')
           plt.savefig('./reports/test_results_apis_FGC_in_QA.png', bbox_inches='tight')
           EOF
           
