@@ -8,13 +8,14 @@ on:
   schedule:
     - cron: "0 22 * * 5"
 
-  # Disparar quando o workflow verify-tests for concluído
-  workflow_run:
-    workflows: ["verify-tests"]
-    types:
-      - completed
-    repositories:
-      - fundogaratidor/ctb-spring-endpoints
+  # Disparar quando houver um PR nos repositórios dos devs
+  pull_request:
+    types: [opened, synchronize, reopened, closed]
+    branches:
+      - main
+      - develop
+    paths:
+      - "**"
 
 jobs:
   run-newman:
@@ -116,6 +117,7 @@ jobs:
           echo "Verifique os logs em:"
           echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           echo "===================================="
+
 
 
 
