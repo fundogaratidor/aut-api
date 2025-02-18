@@ -8,19 +8,11 @@ on:
   schedule:
     - cron: "0 22 * * 5"
 
-  # Disparar quando houver um PR nos repositórios dos devs
-  pull_request:
-    types: [opened, synchronize, reopened, closed]
-    branches:
-      - main
-      - develop
-    paths:
-      - "**"
-    repositories:
-      - fundogaratidor/ctb-spring-library-test
-      - fundogaratidor/ctb-spring-endpoints-batch
-      - fundogaratidor/ctb-spring-endpoints
-      - fundogaratidor/ctb-spring-library
+  # Disparar quando o workflow verify-tests for concluído
+  workflow_run:
+    workflows: ["verify-tests"]
+    types:
+      - completed
 
 jobs:
   run-newman:
@@ -116,11 +108,12 @@ jobs:
         if: failure()
         run: |
           echo "===================================="
-          echo "\ud83d\udea8 Pipeline Failed!"
+          echo "🚨 Pipeline Failed!"
           echo "Branch: ${{ github.ref }}"
           echo "Commit: ${{ github.sha }}"
           echo "Verifique os logs em:"
           echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           echo "===================================="
+
 
 
