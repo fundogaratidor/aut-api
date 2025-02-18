@@ -13,6 +13,8 @@ on:
     workflows: ["verify-tests"]
     types:
       - completed
+    repositories:
+      - fundogaratidor/ctb-spring-endpoints
 
 jobs:
   run-newman:
