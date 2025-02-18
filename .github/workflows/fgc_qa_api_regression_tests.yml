@@ -8,14 +8,12 @@ on:
   schedule:
     - cron: "0 22 * * 5"
 
-  # Disparar quando houver um PR nos repositórios dos devs
+  # Executar testes automaticamente em PRs para `main` e `develop`
   pull_request:
-    types: [opened, synchronize, reopened, closed]
+    types: [opened, synchronize, reopened]
     branches:
       - main
       - develop
-    paths:
-      - "**"
 
 jobs:
   run-newman:
@@ -117,6 +115,7 @@ jobs:
           echo "Verifique os logs em:"
           echo "https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }}"
           echo "===================================="
+
 
 
 
