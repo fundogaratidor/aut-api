@@ -37,8 +37,8 @@ jobs:
         id: run_tests
         continue-on-error: true
         run: |
-          newman run qa_fgc_aws_contribuicoes.postman_collections.json \
-          -e qa_fgc_aws.postman_environment.json \
+          newman run qagw_gold_fgc_contribuicoes.postman_collections.json \
+          -e qagw_gold_fgc_contribuicoes.postman_environment.json \
           -r cli,htmlextra,json \
           --reporter-json-export ./reports/test_results.json \
           --reporter-htmlextra-export ./reports/qa_test_report.html \
