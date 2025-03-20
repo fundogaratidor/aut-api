@@ -42,7 +42,7 @@ jobs:
           -r cli,htmlextra,json \
           --reporter-json-export ./reports/test_results.json \
           --reporter-htmlextra-export ./reports/qa_test_report.html \
-          --reporter-htmlextra-title "FGC QA-AWS Sprints 1 e 3 API Test"
+          --reporter-htmlextra-title "FGC Test Api All Sprints"
           
       - name: Generate Test Results Pie Chart
         run: |
